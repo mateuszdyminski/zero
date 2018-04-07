@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: users-api-deployment-blue
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: users-api-blue
+    spec:
+      containers:
+      - name: users-api-blue
+        image: index.docker.io/mateuszdyminski/zero-java:v1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080

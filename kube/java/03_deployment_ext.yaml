@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: users-api-deployment
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: users-api
+        serviceName: users-api
+    spec:
+      containers:
+      - name: users-api
+        image: index.docker.io/mateuszdyminski/zero-java:v1
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5       
+          timeoutSeconds: 1
