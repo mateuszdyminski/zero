@@ -1,0 +1,68 @@
+Zero-Downtime deployments with Kubernetes
+
+Mateusz Dymiński
+Nokia
+
+[[github.com/mateuszdyminski/zero][github.com/mateuszdyminski/zero]]
+@m_dyminski
+
+* Agenda
+
+1. What's REST?
+2. HATEOAS
+3. HTTP REST good practices
+4. HTTP REST performance tricks
+5. HTTP monitoring
+6. HTTP performance testing
+
+* Graceful shutdown
+
+Possible scenarios for a graceful web server shutdown:
+
+App gets notification to stop (received SIGTERM)
+App lets know the load balancer that it’s not ready for newer requests
+App served all the ongoing requests
+App releases all of the resources correctly: DB, queue, etc.
+App exits with "success" status code (process.exit())
+
+* Graceful shutdown
+
+This article goes deep with shutting down web servers properly, but you should also apply these techniques to your worker processes: it’s highly recommended to stop consuming queues for SIGTERM and finish the current task/job.
+
+* Graceful shutdown - what happend without
+
+If we don't stop our application correctly, we are wasting resources like DB connections and we may also break ongoing requests. An HTTP request doesn't recover automatically - if we fail to serve it, then we simply missed it.
+
+* Graceful shutdown
+
+Demo without graceful shutdown 
+
+* Graceful shutdown in Golang
+
+* Graceful shutdown in Java
+
+* Demo
+
+    hey -c 10 -n 100000 http://192.168.99.100:30253/users/1 & sleep 1 && kubectl set image deployments/users-api-deployment users-api=mateuszdyminski/simple:v2
+
+    hey -c 10 -n 100000 http://192.168.99.100:30253/users/1 & sleep 1 && kubectl apply -f 02_deployment.yaml 
+
+
+* Demo - Plan
+
+1. Deployment - Regular
+2. Deployment - Rolling update 
+3. Deployment - Rolling update + readiness probes
+4. Deployment - Rolling update + readiness probes + gracefull shutdown
+4. Deployment - Rolling update + readiness probes + gracefull shutdown + custom rediness probe
+
+
+0. Pre Steps for Demo
+
+    minikube start
+    kubectl apply -f 01_users_srv.yaml
+
+1. Demo 1
+
+    kubectl apply -f 02_deployment.yaml 
+    kubectl set image deployments/users-api-deployment users-api=mateuszdyminski/simple:v2

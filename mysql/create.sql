@@ -1,0 +1,7 @@
+CREATE DATABASE users;
+
+CREATE USER 'zero'@'%' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON * . * TO 'zero'@'%';
+
+FLUSH PRIVILEGES;
