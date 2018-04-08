@@ -1,19 +1,49 @@
-# zero
-zero-downtime deployments in Kubernetes
+# Zero-Downtime deployments in Kubernetes
 
-# Local environment
+Repository contains code and presentation of: "Zero-Downtime deployments in Kubernetes"
 
-Run minikube
+## Presentation
+
+[zero-downtime.pptx](presentation/zero-downtime.pptx)
+
+## Requirements
+
+* minikube
+* kubectl
+* helm
+* sql
+* JDK8 or higher for Java examples
+* Golang 1.8 or higher for Go examples
+
+### Demo Users Service
+
+Start minikube:
 ```
-$ minikube start 
+minikube start
 ```
 
-
+Install MySQL(with Helm):
 ```
-wrk -c 10 -d 40s http://192.168.99.100:31831/api/users/1  & sleep 1 && kubectl apply -f 02_deployment.yaml
-
-
-http://192.168.99.100:31831/actuator/health
-
-
+helm install stable/mysql
 ```
+
+Create db:
+```
+mysql/mysql.sh create
+```
+
+Run Users Service in Kubernetes:
+```
+kubectl apply -f kube/java/01_users_srv.yaml
+```
+
+Run Users Deployment in Kubernetes:
+```
+kubectl apply -f kube/java/02_deployment.yaml
+```
+
+Verification:
+
+Open:
+[http://192.168.99.100:30001/api/users/1](http://192.168.99.100:30001/api/users/1)
+[http://192.168.99.100:30001/actuator/info](http://192.168.99.100:30001/actuator/info)
