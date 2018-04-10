@@ -45,5 +45,12 @@ kubectl apply -f kube/java/02_deployment.yaml
 Verification:
 
 Open:
-[http://192.168.99.100:30001/api/users/1](http://192.168.99.100:30001/api/users/1)
-[http://192.168.99.100:30001/actuator/info](http://192.168.99.100:30001/actuator/info)
+* API: [http://192.168.99.100:30001/api/users/1](http://192.168.99.100:30001/api/users/1)
+* INFO: [http://192.168.99.100:30001/actuator/info](http://192.168.99.100:30001/actuator/info)
+
+### Improvements:
+- [ ] Add example with Canary deployment
+- [ ] Add some difference (new field) between App V1 and App V2
+- [ ] [Presentation] Use better diagram to introduce Kubernetes
+- [ ] Add code snippet with HealthController
+- [ ] Create new version of presentation fo Golang
