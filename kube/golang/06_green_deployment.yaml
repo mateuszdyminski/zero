@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: users-go-api-deployment-green
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: users-go-api-green
+    spec:
+      containers:
+      - name: users-go-api-green
+        image: index.docker.io/mateuszdyminski/zero-golang:v2
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8080

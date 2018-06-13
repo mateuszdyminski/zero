@@ -11,6 +11,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// WriteJSON writes JSON response struct to ResponseWriter.
 func WriteJSON(w http.ResponseWriter, response interface{}) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json, err := json.Marshal(response)
@@ -25,6 +26,7 @@ func WriteJSON(w http.ResponseWriter, response interface{}) error {
 	return nil
 }
 
+// WriteErr writes error to ResponseWriter.
 func WriteErr(w http.ResponseWriter, err error, httpCode int) {
 	logrus.Error(err.Error())
 
@@ -36,10 +38,14 @@ func WriteErr(w http.ResponseWriter, err error, httpCode int) {
 		"error":      err.Error(),
 	}
 
-	errJson, _ := json.Marshal(errMap)
-	logrus.Error(string(errJson))
+	errJSON, err := json.Marshal(errMap)
+	if err != nil {
+		logrus.Errorf("can't marshal error response. err: %s", err)
+	}
+
+	logrus.Error(string(errJSON))
 	w.WriteHeader(httpCode)
-	w.Write(errJson)
+	w.Write(errJSON)
 }
 
 // callStats holds various stats associated with HTTP request-response pair.
@@ -156,13 +162,13 @@ func getRemoteAddr(r *http.Request) string {
 }
 
 // Describe implements prometheus.Collector interface.
-func (d LoggingHandler) Describe(in chan<- *prometheus.Desc) {
-	d.duration.Describe(in)
-	d.requests.Describe(in)
+func (h LoggingHandler) Describe(in chan<- *prometheus.Desc) {
+	h.duration.Describe(in)
+	h.requests.Describe(in)
 }
 
 // Collect implements prometheus.Collector interface.
-func (d LoggingHandler) Collect(in chan<- prometheus.Metric) {
-	d.duration.Collect(in)
-	d.requests.Collect(in)
+func (h LoggingHandler) Collect(in chan<- prometheus.Metric) {
+	h.duration.Collect(in)
+	h.requests.Collect(in)
 }

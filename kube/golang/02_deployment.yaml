@@ -1,27 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: users-api-deployment
+  name: users-go-api-deployment
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
-        app: users-api
-        serviceName: users-api
-      annotations:
-        prometheus.io/scrape: 'true'
+        app: users-go-api
+        serviceName: users-go-api
     spec:
       containers:
-      - name: users-api
-        image: index.docker.io/mateuszdyminski/zero-simple:v2
+      - name: users-go-api
+        image: index.docker.io/mateuszdyminski/zero-golang:v1
         imagePullPolicy: Always
         ports:
           - containerPort: 8080
-        resources:
-            limits:
-              memory: 100Mi
-              cpu: 200m
-            requests:
-              memory: 10Mi
-              cpu: 20m

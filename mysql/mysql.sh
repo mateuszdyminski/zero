@@ -15,7 +15,7 @@ EOF
 CMD="$1"
 MYSQL_ROOT_PASSWORD=$(kubectl get secret --namespace default mysql-mysql -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo)
 MINIKUBE_IP=$(minikube ip)
-MYSQL_PORT=$(kubectl get svc -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}')
+MYSQL_PORT=$(kubectl get svc -l='app=mysql-mysql' -o go-template='{{range .items}}{{range.spec.ports}}{{if .nodePort}}{{.nodePort}}{{"\n"}}{{end}}{{end}}{{end}}')
 		
 echo "DB connection string: root:$MYSQL_ROOT_PASSWORD@$MINIKUBE_IP:$MYSQL_PORT/users"
 

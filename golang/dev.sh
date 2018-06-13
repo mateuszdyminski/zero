@@ -34,7 +34,7 @@ case "$CMD" in
 		cd $TYPE; CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "$LDFLAGS" -o main -a -tags netgo .
 	;;
 	docker)
-		docker build --build-arg TYPE=$TYPE -t "mateuszdyminski/zero-$TYPE:$VERSION" . && docker push "mateuszdyminski/zero-$TYPE:$VERSION"
+		docker build --build-arg TYPE=$TYPE -t "mateuszdyminski/zero-golang:$VERSION" . && docker push "mateuszdyminski/zero-golang:$VERSION"
 	;;
 	*)
 		usage

@@ -24,14 +24,16 @@ minikube start
 
 Install MySQL(with Helm):
 ```
-helm install stable/mysql
+helm install --set mysqlRootPassword=password --name mysql stable/mysql
+kubectl get service mysql-mysql -o yaml | sed 's/type: ClusterIP/type: NodePort/g' | kubectl replace -f -
 ```
 
 Create db:
 ```
-mysql/mysql.sh create
+cd mysql && ./mysql.sh create
 ```
 
+#### Users Service - Java
 Run Users Service in Kubernetes:
 ```
 kubectl apply -f kube/java/01_users_srv.yaml
@@ -40,6 +42,17 @@ kubectl apply -f kube/java/01_users_srv.yaml
 Run Users Deployment in Kubernetes:
 ```
 kubectl apply -f kube/java/02_deployment.yaml
+```
+
+#### Users Service - Golang
+Run Users Service in Kubernetes:
+```
+kubectl apply -f kube/golang/01_users_srv.yaml
+```
+
+Run Users Deployment in Kubernetes:
+```
+kubectl apply -f kube/golang/02_deployment.yaml
 ```
 
 Verification:
